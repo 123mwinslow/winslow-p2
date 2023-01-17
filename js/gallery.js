@@ -33,10 +33,10 @@ function animate() {
 /************* DO TOUCH CODE ABOVE THIS LINE ***************/
 
 function swapPhoto() {
-  const imageHTML = document.getElementById('photo').src;
-  imageHTML.src = mImages[mCurrentIndex].img;
-  if(mCurrentIndex < 12){mCurrentIndex++} else
+  if(mCurrentIndex < mImages.length){mCurrentIndex++} else
   {mCurrentIndex = 0};
+  
+  document.getElementById('photo').src = mImages[mCurrentIndex].img;
   // if(k < path3.length - 1){k++;} else
   //Add code here to access the #slideShow element.
   //Access the img element and replace its source
@@ -57,7 +57,7 @@ var mJson;
 var mUrl = 'images.json';
 
 mRequest.onreadystatechange = function(){
-  if(this.ready == 4 && this.status == 200){
+  if(this.readyState == 4 && this.status == 200){
 	  mJson = JSON.parse(mRequest.responseText);
 	  iterateJSON(mJson);
   }
