@@ -35,7 +35,38 @@ function animate() {
 function swapPhoto() {
   if(mCurrentIndex < mImages.length){mCurrentIndex++} else
   {mCurrentIndex = 0};
+
+
+  document.getElementById('photo').src = mImages[mCurrentIndex].img;
+  var loc = document.getElementsByClassName('location');
+  loc[0].innerHTML = "Location: " + mImages[mCurrentIndex].location;
+  var des = document.getElementsByClassName('description');
+  des[0].innerHTML = "Description: " + mImages[mCurrentIndex].description;
+  var dt = document.getElementsByClassName('date');
+  dt[0].innerHTML = "Date: " + mImages[mCurrentIndex].date;
+
+  mLastFrameTime = 0;
+  mCurrentIndex += 1;
+}
   
+function toggleDetails()
+{
+  if($(".monIndicator").hasClass("rot90"))
+{
+  $(".moreIndicator" ).removeClass("rot90");
+  $(".moreIndicator" ).addClass("rot270");
+}
+else {
+  $(".moreIndicator" ).removeClass("rot270");
+  $(".moreIndicator" ).addClass("rot90");
+}
+$( ".details" ).slideToggle( "slow", "linear" );
+}
+
+
+
+
+{
   document.getElementById('photo').src = mImages[mCurrentIndex].img;
   // if(k < path3.length - 1){k++;} else
   //Add code here to access the #slideShow element.
@@ -54,7 +85,7 @@ var mRequest = new XMLHttpRequest();
 // Holds the retrived JSON information
 var mJson;
 
-var mUrl = 'images.json';
+var mUrl = "images.json";
 
 mRequest.onreadystatechange = function(){
   if(this.readyState == 4 && this.status == 200){
@@ -85,10 +116,11 @@ function makeGalleryImageOnloadCallback(galleryImage) {
 }
 
 $(document).ready( function() {
-  
-  // This initially hides the photos' metadata information
-  // $('.details').eq(0).hide();
-  
+  $( "#nextPhoto" ).position({
+    my: "right bottom",
+    at: "right bottom",
+    of: "#nav"
+  });
 });
 
 window.addEventListener('load', function() {
@@ -96,6 +128,34 @@ window.addEventListener('load', function() {
   console.log('window loaded');
 
 }, false);
+
+function fetchJSON()
+{
+  myRequest.onreadystatechange = function() {
+    console.log("on ready state change");
+    if(this.readyState == 4&& this.status == 200) {
+      mJson = JSON.parse(mRequest.responseText);
+      iterateJSON(mJson);
+    }
+  }
+mRequest.open("GET", mUrl, true);
+mRequest.send();
+}
+
+
+const urlParams = new URLSearchParams(window.location.search);
+
+for (const [key, value] of urlParams) {  
+console.log('${key}:${value}');
+mUrl = value;
+}
+if(mUrl ==undefined)
+{
+  mUrl = 'images.json';
+}
+fetchJSON();
+
+
 
 function GalleryImage() { 
   let location = "";
